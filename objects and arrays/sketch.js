@@ -45,7 +45,7 @@ function moveBalls() {
     
     for (let j = 0; j < balls.length; j++) {
       if (balls[i] !== balls[j]) {
-        if (dist(balls[i].x, balls[i].y, balls[j].x, balls[j].y) <= balls[i].size) {
+        if (dist(balls[i].x, balls[i].y, balls[j].x, balls[j].y) <= balls[i].size + balls[j].size) {
           balls[i].dx *= -1;
           balls[i].dy *= -1;
         }
