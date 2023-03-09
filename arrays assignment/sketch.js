@@ -7,9 +7,9 @@
 
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(640, 480, WEBGL);
 }
 
 function draw() {
-  background(220);
+  background(0);
 }
