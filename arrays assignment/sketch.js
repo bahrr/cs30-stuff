@@ -8,9 +8,7 @@ let boxes = [];
 let imgs = [];
 
 class mineBox {
-  constructor(x, y, count) {
-    this.x =x;
-    this.y = y;
+  constructor(count) {
     this.count = count;
   }
 }
@@ -23,28 +21,37 @@ function preload() {
 
 function setup() {
   createCanvas(640, 480, WEBGL);
+
   noStroke(); 
   smooth();
+  angleMode(DEGREES);
+
   createBoxes();
 }
 function createBoxes() {
   for (let y = 0; y < 10; y++) {
     let boxColumn = [];
     for (let x = 0; x < 10; x++) {
-      boxColumn.push()
+      boxColumn.push(new mineBox(0));
     }
+    boxes.push(boxColumn);
   }
 }
 
 function drawBoxes() {
-  rotate(75, createVector(1, 0, 0));
-  for (let i = 0; i < boxes.length; i++) {
-    texture(imgs[boxes[i].count]);
-    box(50);
+  rotate(-45, createVector(1, 0, 0));
+  translate(-225, 0, -350);
+  for (let y = 0; y < boxes.length; y++) {
+    for (let x = 0; x <boxes[y].length; x++) {
+      push();
+      translate(x * 50, 0, y * 50);
+      texture(imgs[boxes[y][x].count]);
+      box(50);
+      pop();
+    }
   }
 }
 
 function draw() {
-  background(0);
   drawBoxes();
 }
