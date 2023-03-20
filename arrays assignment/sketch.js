@@ -21,7 +21,9 @@ class IntersectPlane {
   constructor(nx, ny, nz, px, py, pz) {
     this.normal = createVector(nx, ny, nz); // The normal of the plane
     this.point = createVector(px, py, pz); // The location of the plane
+    this.dot = this.point.dot(this.normal);
   }
+  // getLambda``
 }
 
 function preload() {
