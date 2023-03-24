@@ -97,19 +97,20 @@ function nextStep(grid) {
 
 function ConwayResult(grid, x, y) {
   let neighbours = 0;
+  let numY = Number(y);
+  let numX = Number(x);
   for (let i = -1;  i <= 1; i++) {
     for (let j = -1; j <= 1; j++) {
-      if (i !== y && j !== x) {
-        if (y + i >= 0 && y + i < gridSize && x + j >= 0 && x + j < gridSize) {
-          console.log(j, i);
-          neighbours += grid[y + i][x + j];
+      if (i !== numY && j !== numX) {
+        if (numY + i >= 0 && numY + i < gridSize && numX + j >= 0 && numX + j < gridSize) {
+          neighbours += grid[numY + i][numX + j];
         } 
       }
     }
   }
-  console.log(neighbours);
   if (neighbours === 2) {
-    return grid[y][x];
+    console.log("bruh");
+    return grid[numY][numX];
   }
   else if (neighbours === 3) {
     return 1;
