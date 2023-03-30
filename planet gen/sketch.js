@@ -5,7 +5,7 @@
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 let worldTexture;
-let time = 0;
+let t = 0;
 
 
 function setup() {
@@ -19,7 +19,7 @@ function setup() {
 function draw() {
   background(0);
   drawSphere();
-  time += 1;
+  t += 1;
 }
 
 // draws the actual sphere
@@ -27,7 +27,7 @@ function drawSphere() {
   push();
   noStroke();
   texture(worldTexture);
-  rotateY(time);
+  rotateY(t);
   sphere(100);
   pop();
 }
@@ -35,10 +35,11 @@ function drawSphere() {
 // creates the texture needed for the spehere
 function createTexture(seed, res) {
   let normalMap = generateNormals(res); // the normals of the sphere mapped to an array
-  let texArray = normalMap; // an array to make editing the texture simpler
 
+  let noiseMap = generateNoise(normalMap, seed, 10); // Creates noise to use
   
 
+  let texArray = noiseMap; // an array to make editing the texture simpler
   let finalTexture = createImage(res, res); // the final image used
   finalTexture.loadPixels();
 
@@ -57,6 +58,7 @@ function createTexture(seed, res) {
   return finalTexture;
 }
 
+// creates map of sphere normals
 function generateNormals(size) {
   let normals = [];
   for (let y = 0; y < size; y++) {
@@ -73,4 +75,21 @@ function generateNormals(size) {
     }
   }
   return normals;
+}
+
+// creates map with noise
+function generateNoise(input, seed, scale) {
+  let noiseMap = [];
+  for (let y = 0; y < input.length; y++) {
+    noiseMap.push([]);
+    for (let x = 0; x < input.length; x++) {
+      let inputRed = input[y][x][0] * scale + seed;
+      let inputGreen = input[y][x][1] * scale + seed;
+      let inputBlue = input[y][x][2] * scale + seed;
+      
+      let n = noise(inputRed, inputGreen, inputBlue);
+      noiseMap[y].push([n, n, n]);
+    }
+  }
+  return noiseMap;
 }
