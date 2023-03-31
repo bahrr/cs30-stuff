@@ -36,7 +36,8 @@ function drawSphere() {
 function createTexture(seed, res) {
   let normalMap = generateNormals(res); // the normals of the sphere mapped to an array
 
-  let noiseMap = generateNoise(normalMap, seed, 10); // Creates noise to use
+  let noiseMap = generateNoise(normalMap, seed, 5); // Creates noise to use
+  noiseMap = generateNoise(noiseMap, seed, 20); // Creates noise to use
   
 
   let texArray = noiseMap; // an array to make editing the texture simpler
@@ -50,6 +51,14 @@ function createTexture(seed, res) {
       let colorR = texArray[y][x][0];
       let colorG = texArray[y][x][1];
       let colorB = texArray[y][x][2];
+      if (colorR < 0.5) {
+        colorR = 0;
+      }
+      else {
+        colorR *= 0.5;
+        colorG *= 0.7;
+        colorB = 0;
+      }
 
       finalTexture.set(x, y, color(colorR, colorG, colorB));
     }
