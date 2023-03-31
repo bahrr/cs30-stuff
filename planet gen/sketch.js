@@ -13,7 +13,7 @@ function setup() {
   let seed = random(2000);
   colorMode(RGB, 1.0);
   angleMode(DEGREES);
-  worldTexture = createTexture(seed, 1024);
+  worldTexture = createTexture(seed, 1024, 5);
 }
 
 function draw() {
@@ -33,25 +33,24 @@ function drawSphere() {
 }
 
 // creates the texture needed for the spehere
-function createTexture(seed, res) {
-  let normalMap = generateNormals(res); // the normals of the sphere mapped to an array
+function createTexture(seed, res, size) {
+  // let normalMap = generateNormals(res); // the normals of the sphere mapped to an array
 
-  let noiseMap = generateNoise(normalMap, seed, 10); // Creates noise to use
+  // let noiseMap = generateNoise(normalMap, seed, 10); // Creates noise to use
   
 
-  let texArray = noiseMap; // an array to make editing the texture simpler
+  // let texArray = noiseMap; // an array to make editing the texture simpler
   let finalTexture = createImage(res, res); // the final image used
   finalTexture.loadPixels();
 
   // sets each pixel on the image to the texture array
-  for (let y = 0; y < texArray.length; y++) {
-    for (let x = 0; x < texArray.length; x++) {
-      let index = (y * texArray.length + x) * 4;
-      let colorR = texArray[y][x][0];
-      let colorG = texArray[y][x][1];
-      let colorB = texArray[y][x][2];
+  for (let y = 0; y < res; y++) {
+    for (let x = 0; x < res; x++) {
+      let normals = generateNormals(x, y, res);
+      let randomNoise = generateNoise(normals, x, y, seed , size);
 
-      finalTexture.set(x, y, color(colorR, colorG, colorB));
+      let finalColour = [randomNoise[0] / 2 + 0.5, randomNoise[1] / 2 + 0.5, randomNoise[2] / 2 + 0.5];
+      finalTexture.set(x, y, color(finalColour[0], finalColour[1], finalColour[2]));
     }
   }
   finalTexture.updatePixels();
@@ -59,37 +58,26 @@ function createTexture(seed, res) {
 }
 
 // creates map of sphere normals
-function generateNormals(size) {
-  let normals = [];
-  for (let y = 0; y < size; y++) {
-    normals.push([]);
-    for (let x = 0; x < size; x++) {
-      let xAngle = x * 360 / size;
-      let yAngle = y * 180 / size;
+function generateNormals(x, y, res) {
+  // converts texture coordinate to angles
+  let rx = x * 360 / res;
+  let ry = y * 180 / res;
 
-      let nx = sin(xAngle) / 2 + 0.5;
-      let ny = cos(yAngle) / 2 + 0.5;
-      let nz = cos(-xAngle) / 2 + 0.5;
-      let normal = [nx, ny, nz];
-      normals[y].push(normal);
-    }
-  }
-  return normals;
+  // converts angles to normals
+  let nx = sin(rx);
+  let ny = cos(ry);
+  let nz = cos(-rx);
+
+  return [nx, ny, nz];
 }
 
 // creates map with noise
-function generateNoise(input, seed, scale) {
-  let noiseMap = [];
-  for (let y = 0; y < input.length; y++) {
-    noiseMap.push([]);
-    for (let x = 0; x < input.length; x++) {
-      let inputRed = input[y][x][0] * scale + seed;
-      let inputGreen = input[y][x][1] * scale + seed;
-      let inputBlue = input[y][x][2] * scale + seed;
-      
-      let n = noise(inputRed, inputGreen, inputBlue);
-      noiseMap[y].push([n, n, n]);
-    }
-  }
-  return noiseMap;
+function generateNoise(input, seed, size) {
+  // converts input xyz or rgb into noise
+  let ix = noise((input[0] / 2 + 0.5) * size + seed);
+  let iy = noise((input[1] / 2 + 0.5) * size + seed);
+  let iz = noise((input[2] / 2 + 0.5) * size + seed);
+  
+
+  return [ix, iy, iz];
 }
