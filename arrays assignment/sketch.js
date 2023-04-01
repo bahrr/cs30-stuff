@@ -6,6 +6,7 @@
 // - describe what you did to take this project "above and beyond"
 let boxes = [];
 let imgs = [];
+let plane;
 
 // Boxes used as the 3D equivalent to tiles
 class MineBox {
@@ -23,7 +24,9 @@ class IntersectPlane {
     this.point = createVector(px, py, pz); // The location of the plane
     this.dot = this.point.dot(this.normal);
   }
-  // getLambda``
+  getLambda(Q, v) {
+    return (-this.dot - this.normal.dot(Q)) / this.normal.dot(v);
+  }
 }
 
 function preload() {
@@ -38,6 +41,7 @@ function setup() {
   noStroke(); 
   smooth();
   angleMode(DEGREES);
+  plane = new IntersectPlane(0, -.5, 0, 250, -400, 600)
 
   createBoxes();
   placeMines();
@@ -67,8 +71,7 @@ function placeMines() {
 
 // Draws the boxes
 function drawBoxes() {
-  rotate(-45, createVector(1, 0, 0));
-  translate(-225, 0, -350);
+  push();
   for (let y = 0; y < boxes.length; y++) {
     for (let x = 0; x <boxes[y].length; x++) {
       push();
@@ -78,8 +81,30 @@ function drawBoxes() {
       pop();
     }
   }
+  pop();
+}
+// Draws the cursor
+function drawCursor() {
+  const x = mouseX - width / 2;
+  const y = mouseY - height / 2;
+
+  let q = createVector(0, 0, 0);
+  let v = createVector(x, y, 0);
+  let lambda = plane.getLambda(q, v);
+  let intersect = p5.Vector.add(q, p5.Vector.mult(v, lambda));
+  console.log(lambda);
+
+  push();
+  translate(intersect);
+  sphere(25);
+  pop();
 }
 
 function draw() {
+  background(0);
+  let cam = createCamera();
+  cam.setPosition(250, -400, 600);
+  cam.tilt(45);
   drawBoxes();
+  drawCursor();
 }

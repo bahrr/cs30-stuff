@@ -1,9 +1,9 @@
-// Project Title
-// Your Name
-// Date
+// Planet generator
+// Ivan Gorylev
+// March 31
 //
 // Extra for Experts:
-// - describe what you did to take this project "above and beyond"
+// - I used a texture as a canvas and mapped it onto a sphere
 let worldTexture;
 let t = 0;
 
@@ -36,8 +36,8 @@ function drawSphere() {
 function createTexture(seed, res) {
   let normalMap = generateNormals(res); // the normals of the sphere mapped to an array
 
-  let noiseMap = generateNoise(normalMap, seed, 5); // Creates noise to use
-  noiseMap = generateNoise(noiseMap, seed, 20); // Creates noise to use
+  let noiseMap = generateNoise(normalMap, seed, 3); // Creates noise to use
+  noiseMap = generateNoise(noiseMap, seed, 5); // Distorts the noise texture further
   
 
   let texArray = noiseMap; // an array to make editing the texture simpler
@@ -55,9 +55,9 @@ function createTexture(seed, res) {
         colorR = 0;
       }
       else {
-        colorR *= 0.5;
-        colorG *= 0.7;
-        colorB = 0;
+        colorR = 0.1 + (colorR * .88);
+        colorG = 0.33 + (colorG * 0.51);
+        colorB = 0.02 + (colorB * 0.57);
       }
 
       finalTexture.set(x, y, color(colorR, colorG, colorB));
@@ -73,9 +73,11 @@ function generateNormals(size) {
   for (let y = 0; y < size; y++) {
     normals.push([]);
     for (let x = 0; x < size; x++) {
+      // Converts texture location to angle
       let xAngle = x * 360 / size;
       let yAngle = y * 180 / size;
 
+      // Converts angle to normal
       let nx = sin(xAngle) / 2 + 0.5;
       let ny = cos(yAngle) / 2 + 0.5;
       let nz = cos(-xAngle) / 2 + 0.5;
@@ -92,6 +94,7 @@ function generateNoise(input, seed, scale) {
   for (let y = 0; y < input.length; y++) {
     noiseMap.push([]);
     for (let x = 0; x < input.length; x++) {
+      // Adjusts inputs to account for the scale and seed
       let inputRed = input[y][x][0] * scale + seed;
       let inputGreen = input[y][x][1] * scale + seed;
       let inputBlue = input[y][x][2] * scale + seed;
