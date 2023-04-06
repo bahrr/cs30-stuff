@@ -7,22 +7,43 @@
 let worldTexture;
 let t = 0;
 
+let noiseSize = 3; // Noise size
+let noiseDistort = 5; // Noise distortion
+let seed = 0;
+
+let font; // Font used for UI
+
+function preload() {
+  font = loadFont("assets/Aileron-Heavy.otf");
+}
+
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
-  let seed = random(2000);
+  seed = random(2000);
   colorMode(RGB, 1.0);
   angleMode(DEGREES);
-  worldTexture = createTexture(seed, 1024);
+  worldTexture = createTexture(seed, 256);
 }
 
 function draw() {
   background(0);
   drawSphere();
+  drawText();
   t += 1;
 }
 
-// draws the actual sphere
+// Displays info about world
+function drawText() {
+  push();
+  fill(255);
+  textFont(font);
+  textSize(40);
+  text("seed: " + seed, 10 - width / 2, 40 - height / 2);
+  pop();
+}
+
+// Draws the actual sphere
 function drawSphere() {
   push();
   noStroke();
@@ -32,12 +53,12 @@ function drawSphere() {
   pop();
 }
 
-// creates the texture needed for the spehere
+// Creates the texture needed for the spehere
 function createTexture(seed, res) {
   let normalMap = generateNormals(res); // the normals of the sphere mapped to an array
 
-  let noiseMap = generateNoise(normalMap, seed, 3); // Creates noise to use
-  noiseMap = generateNoise(noiseMap, seed, 5); // Distorts the noise texture further
+  let noiseMap = generateNoise(normalMap, seed, noiseSize); // Creates noise to use
+  noiseMap = generateNoise(noiseMap, seed, noiseDistort); // Distorts the noise texture further
   
 
   let texArray = noiseMap; // an array to make editing the texture simpler
@@ -55,9 +76,9 @@ function createTexture(seed, res) {
         colorR = 0;
       }
       else {
-        colorR = 0.1 + (colorR * .88);
-        colorG = 0.33 + (colorG * 0.51);
-        colorB = 0.02 + (colorB * 0.57);
+        colorR = 0.1 + colorR * 0.88;
+        colorG = 0.33 + colorG * 0.51;
+        colorB = 0.02 + colorB * 0.57;
       }
 
       finalTexture.set(x, y, color(colorR, colorG, colorB));
@@ -65,6 +86,34 @@ function createTexture(seed, res) {
   }
   finalTexture.updatePixels();
   return finalTexture;
+}
+
+function keyTyped() {
+  // New world
+  if (key === "r") {
+    seed = random(2000);
+    worldTexture = createTexture(seed, 256);
+  }
+  // Makes smaller islands
+  if (key === "q") {
+    noiseSize *= 1.1;
+    worldTexture = createTexture(seed, 256);
+  }
+  // Makes bigger islands
+  if (key === "w") {
+    noiseSize /= 1.1;
+    worldTexture = createTexture(seed, 256);
+  }
+  // Increases noise distortion
+  if (key === "s") {
+    noiseDistort *= 1.1;
+    worldTexture = createTexture(seed, 256);
+  }
+  // Decreases noise distortion
+  if (key === "a") {
+    noiseDistort /= 1.1;
+    worldTexture = createTexture(seed, 256);
+  }
 }
 
 // creates map of sphere normals

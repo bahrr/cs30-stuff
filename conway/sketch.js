@@ -4,6 +4,9 @@
 //
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
+// eslint-disable-next-line no-undef
+let scribble = new Scribble();
+
 let gridSize = 10;
 let tileSize = 64;
 let grid;
@@ -14,7 +17,7 @@ function setup() {
 }
 
 function draw() {
-  background(0);
+  background(255);
   drawGrid(grid);
 }
 
@@ -38,7 +41,7 @@ function drawGrid(grid) {
       else {
         fill("blue");
       }
-      square(x * tileSize, y * tileSize, tileSize);
+      scribble.scribbleRect(x * tileSize + tileSize / 2, y * tileSize + tileSize / 2, tileSize, tileSize);
     }
   }
 }
