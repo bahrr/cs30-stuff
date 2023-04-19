@@ -9,6 +9,7 @@
 - [grid neighbours](grid-neighbours)
 - [walker](walker)
 - [fireworks](fireworks)
+- [ball array](ball-array)
 ## Projects
 - [arrays assignment](arrays-assignment)
 - [planet gen](planet-gen)
