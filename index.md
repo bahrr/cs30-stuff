@@ -10,6 +10,7 @@
 - [walker](walker)
 - [fireworks](fireworks)
 - [ball array](ball-array)
+- [fractal circles](fractal-circles)
 ## Projects
 - [arrays assignment](arrays-assignment)
 - [planet gen](planet-gen)
