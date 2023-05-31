@@ -1,4 +1,5 @@
 ## Demos
+
 - [cubic disarray](cubic-disarray)
 - [terrain](terrain)
 - [bubbles](bubbles)
@@ -11,6 +12,9 @@
 - [fireworks](fireworks)
 - [ball array](ball-array)
 - [fractal circles](fractal-circles)
+- [sierpinski](sierpinski)
+
 ## Projects
+
 - [arrays assignment](arrays-assignment)
 - [planet gen](planet-gen)
